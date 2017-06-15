@@ -1,0 +1,8 @@
+{
+  "name": "firebase-blog",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:linguofeng/firebase-blog.git",
+  "author": "linguofeng <linguofeng@msn.com>",
+  "license": "MIT"
+}
