@@ -10,7 +10,7 @@ import Routes exposing (..)
 
 init : Location -> ( Model, Cmd Msg )
 init location =
-    ( M.initModel <| parseLocation <| location, Cmd.none )
+    ( M.init <| parseLocation location, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg

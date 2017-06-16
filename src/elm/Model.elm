@@ -1,15 +1,12 @@
 module Model exposing (..)
 
-
-type Route
-    = NotFoundRoute
-    | IndexRoute
+import Routes exposing (Route)
 
 
 type alias Model =
     { route : Route }
 
 
-initModel : Route -> Model
-initModel route =
+init : Route -> Model
+init route =
     { route = route }
