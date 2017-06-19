@@ -4,8 +4,10 @@ module Page.Home exposing (..)
 -}
 
 import Html exposing (..)
-import Routes exposing (href, Route(PostRoute))
+import Msg exposing (Msg)
+import Routes exposing (to, Route(PostRoute))
 import Model.Post exposing (Post)
+import Custom.Html exposing (link)
 
 
 posts : List Post
@@ -16,11 +18,11 @@ posts =
     ]
 
 
-view : Html msg
+view : Html Msg
 view =
     div [] [ ul [] <| List.map item posts ]
 
 
-item : Post -> Html msg
+item : Post -> Html Msg
 item post =
-    li [] [ a [ href <| PostRoute post.id ] [ text post.title ] ]
+    li [] [ link [ to <| PostRoute post.id ] [ text post.title ] ]

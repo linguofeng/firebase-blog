@@ -1,9 +1,10 @@
-module Routes exposing (Route(..), href, parseLocation)
+module Routes exposing (Route(..), parseLocation, to)
 
 import Html exposing (Attribute)
 import Html.Attributes as Attr
+import Json.Encode as Json
 import Navigation exposing (Location)
-import UrlParser as Url exposing (parseHash, (</>), s, oneOf, top, string, int, Parser)
+import UrlParser as Url exposing (parsePath, (</>), s, oneOf, top, string, int, Parser)
 
 
 type alias PostId =
@@ -16,22 +17,19 @@ type Route
     | PostRoute PostId
 
 
-matcher : Parser (Route -> a) a
-matcher =
+match : Parser (Route -> a) a
+match =
     oneOf
-        [ Url.map HomeRoute (s "")
+        [ Url.map HomeRoute top
         , Url.map PostRoute (s "posts" </> string)
         ]
 
 
 parseLocation : Location -> Route
 parseLocation location =
-    if String.isEmpty location.hash then
-        HomeRoute
-    else
-        location
-            |> parseHash matcher
-            |> Maybe.withDefault NotFoundRoute
+    location
+        |> parsePath match
+        |> Maybe.withDefault NotFoundRoute
 
 
 routeToString : Route -> String
@@ -48,9 +46,17 @@ routeToString route =
                 _ ->
                     []
     in
-        "#/" ++ (String.join "/" paths)
+        "/" ++ (String.join "/" paths)
 
 
-href : Route -> Attribute msg
-href route =
-    Attr.href <| routeToString route
+{-| 自定义一个接收路由的`to`属性
+
+    list [ to HomeRoute ] [ text "首页" ]
+
+-}
+to : Route -> Attribute msg
+to route =
+    route
+        |> routeToString
+        |> Json.string
+        |> Attr.property "to"
